@@ -63,3 +63,12 @@ def register():
     db.session.add(user)
     db.session.commit()
     return redirect(url_for('index'))
+
+"""
+Pops the user variable, i.e. logouts the user.
+Redirects to index().
+"""
+@app.route("/logout")
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index'))
