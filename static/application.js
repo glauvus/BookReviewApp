@@ -1,7 +1,7 @@
 //on load
 $(function () {
-    //if enter key is pressed, make a get request
-    //passing the text from the search field
+    /* if enter key is pressed, make a get request
+    passing the text from the search field */
     $("#searchField").keyup(function(e){
         if(e.keyCode==13) {
             var textToSearch = $(this).val();
@@ -9,6 +9,13 @@ $(function () {
                 createBookTable(data);
             })
         }
+    });
+
+    /*if a table row is clicked, get the isbn
+    and call the apropriate url*/
+    $("#tableBody").on('click', function(e) {
+        var isbn = $(e.target).closest('tr').children(':first').text();
+        window.location.href = "/books/"+isbn
     });
 });
 
