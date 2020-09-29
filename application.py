@@ -1,7 +1,8 @@
-import os, hashlib, binascii
+import os, hashlib, binascii, json
 
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_session import Session
+from sqlalchemy import or_
 from models import *
 
 app = Flask(__name__)
@@ -39,6 +40,8 @@ def login():
     username = request.form.get("username")
     password = request.form.get("password")
     user = User.query.filter_by(username=username).first()
+    if user is None:
+        return render_template("index.html"), 401
     key = binascii.unhexlify(user.password)
     salt = binascii.unhexlify(user.salt)
     new_key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
@@ -72,3 +75,11 @@ Redirects to index().
 def logout():
     session.pop('user', None)
     return redirect(url_for('index'))
+
+"""
+Retrieves the db records that match the search text, and returns them in json format.
+"""
+@app.route("/<string:textToSearch>")
+def search(textToSearch):
+    books = Book.query.filter(or_(Book.isbn.like("%"+textToSearch+"%"), Book.title.like("%"+textToSearch+"%"), Book.author.like("%"+textToSearch+"%"))).all()
+    return json.dumps([dict(isbn=r.isbn, title=r.title, author=r.author, year=r.year) for r in books])
