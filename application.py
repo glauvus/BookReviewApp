@@ -84,7 +84,7 @@ def search(textToSearch):
     books = Book.query.filter(or_(Book.isbn.like("%"+textToSearch+"%"), Book.title.like("%"+textToSearch+"%"), Book.author.like("%"+textToSearch+"%"))).all()
     return json.dumps([dict(isbn=r.isbn, title=r.title, author=r.author, year=r.year) for r in books])
 
-@app.route("/books/<string:isbn>")
+@app.route("/book-<string:isbn>")
 def bookInfo(isbn):
     book = Book.query.filter_by(isbn=isbn).first()
     return render_template("book.html", book=book)

@@ -15,7 +15,7 @@ $(function () {
     and call the apropriate url*/
     $("#tableBody").on('click', function(e) {
         var isbn = $(e.target).closest('tr').children(':first').text();
-        window.location.href = "/books/"+isbn
+        window.location.href = "/book-"+isbn
     });
 });
 

@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<a class="btn btn-outline-danger" href="/logout">Logout</a>
+<div class="row justify-content-center align-items-center">
+    <table class="table col-6">
+        <tr><th scope="row">ISBN</th><td>{{ book.isbn }}</td></tr>
+        <tr><th scope="row">Title</th><td>{{ book.title }}</td></tr>
+        <tr><th scope="row">Author</th><td>{{ book.author }}</td></tr>
+        <tr><th scope="row">Year</th><td>{{ book.year }}</td></tr>
+    </table>
+</div>
+{% endblock %}
