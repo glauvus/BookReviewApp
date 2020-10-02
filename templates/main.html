@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<a class="btn btn-outline-danger" href="/logout">Logout</a>
+<div class="row justify-content-start align-items-center">
+    <a class="btn btn-outline-danger" href="/logout">Logout</a>
+</div>
 <div class="row justify-content-center align-items-center">
-    <div class="input-group md-form form-sm form-1 pl-0 col-4">
+    <div class="input-group md-form form-sm form-1 pl-0 my-4 col-4">
         <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-search text-white" aria-hidden="true"></i></span>
         </div>
         <input class="form-control my-0 py-1" type="text" id="searchField" placeholder="Search" aria-label="Search">
     </div>
+</div>
+<div class="row justify-content-center align-items-center">
     <table class="table table-sm table-hover"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
     <h4 id="noResultsAlert"></h4>
 </div>

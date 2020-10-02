@@ -73,7 +73,7 @@ Redirects to index().
 """
 @app.route("/logout")
 def logout():
-    session.pop('user', None)
+    session.clear()
     return redirect(url_for('index'))
 
 """
@@ -82,9 +82,31 @@ Retrieves the db records that match the search text, and returns them in json fo
 @app.route("/<string:textToSearch>")
 def search(textToSearch):
     books = Book.query.filter(or_(Book.isbn.like("%"+textToSearch+"%"), Book.title.like("%"+textToSearch+"%"), Book.author.like("%"+textToSearch+"%"))).all()
-    return json.dumps([dict(isbn=r.isbn, title=r.title, author=r.author, year=r.year) for r in books])
+    return json.dumps([dict(isbn=b.isbn, title=b.title, author=b.author, year=b.year) for b in books])
 
+"""
+Sets the book session variable and retrieves the db record for the selected book and its reviews.
+Returns book page.
+"""
 @app.route("/book-<string:isbn>")
 def bookInfo(isbn):
+    session['book'] = isbn
     book = Book.query.filter_by(isbn=isbn).first()
-    return render_template("book.html", book=book)
+    #reviews = Review.query.filter_by(r_isbn=isbn).all()
+    reviews = db.session.query(Review, User).join(User).filter(Review.r_isbn==isbn).all()
+    return render_template("book.html", book=book, reviews=reviews)
+
+"""
+Inserts a new record to the db with book's isbn, user's username, review rating and comment.
+Redirects to bookInfo(isbn).
+"""
+@app.route("/review", methods=["POST"])
+def review():
+    isbn = session['book']
+    uid = (User.query.filter_by(username=session['user']).first()).uid
+    reviewRating = request.form.get("reviewRating")
+    reviewComment = request.form.get("reviewComment")
+    review = Review(r_isbn=isbn, r_uid=uid, rating=reviewRating, comment=reviewComment)
+    db.session.add(review)
+    db.session.commit()
+    return redirect(url_for('bookInfo', isbn=isbn))
