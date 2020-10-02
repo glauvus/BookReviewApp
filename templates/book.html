@@ -13,6 +13,9 @@
     </table>
 </div>
 <div class="row justify-content-center align-items-center">
+    <div class="pb-4">{{ratingCount}} people rated this book on GoodReads with an average score of {{avgRating}}</div>
+</div>
+<div class="row justify-content-center align-items-center">
     <form class="col-6" action="{{ url_for('review') }}" method="post">
         <label for="reviewRating">Rate the book</label>
         <input type="range" name="reviewRating" class="form-control-range mb-3" id="reviewRating" min="0" max="5" step="1">

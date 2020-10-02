@@ -1,4 +1,4 @@
-import os, hashlib, binascii, json
+import os, hashlib, binascii, json, requests
 
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_session import Session
@@ -93,7 +93,10 @@ def bookInfo(isbn):
     session['book'] = isbn
     book = Book.query.filter_by(isbn=isbn).first()
     reviews = db.session.query(Review, User).join(User).filter(Review.r_isbn==isbn).all()
-    return render_template("book.html", book=book, reviews=reviews)
+    res = (requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "SH8qrv34ElgwVGpd4DvXg", "isbns": isbn})).json()
+    ratingCount = res['books'][0]['work_ratings_count']
+    avgRating = res['books'][0]['average_rating']
+    return render_template("book.html", book=book, reviews=reviews, ratingCount=ratingCount, avgRating=avgRating)
 
 """
 Inserts a new record to the db with book's isbn, user's username, review rating and comment.
