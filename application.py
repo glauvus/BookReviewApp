@@ -86,6 +86,7 @@ def search(textToSearch):
 
 """
 Sets the book session variable and retrieves the db record for the selected book and its reviews.
+Requests number of ratings and average rating from goodreads.com API.
 Returns book page.
 """
 @app.route("/book-<string:isbn>")
