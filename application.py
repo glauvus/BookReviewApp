@@ -92,7 +92,6 @@ Returns book page.
 def bookInfo(isbn):
     session['book'] = isbn
     book = Book.query.filter_by(isbn=isbn).first()
-    #reviews = Review.query.filter_by(r_isbn=isbn).all()
     reviews = db.session.query(Review, User).join(User).filter(Review.r_isbn==isbn).all()
     return render_template("book.html", book=book, reviews=reviews)
 
